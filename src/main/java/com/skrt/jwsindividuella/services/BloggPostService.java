@@ -61,7 +61,7 @@ public class BloggPostService {
     @Transactional
     public BloggPost update(BloggPostDTO.UpdateRequest dto, Authentication auth){
         BloggPost existing = findById(dto.id());
-        ensureOwner(existing, auth);
+        validateOwner(existing, auth);
         existing.setTitle(dto.title());
         existing.setContent(dto.content());
         return bloggPostRepository.save(existing);
@@ -71,7 +71,7 @@ public class BloggPostService {
     public void delete(Long id, Authentication auth, boolean isAdmin){
         BloggPost existing = findById(id);
         if(!isAdmin){
-            ensureOwner(existing, auth);
+            validateOwner(existing, auth);
         }
         bloggPostRepository.delete(existing);
     }
@@ -81,7 +81,7 @@ public class BloggPostService {
         return bloggPostRepository.count();
     }
 
-    private void ensureOwner(BloggPost post, Authentication auth) {
+    private void validateOwner(BloggPost post, Authentication auth) {
         String sub = ((Jwt) auth.getPrincipal()).getClaimAsString("sub");
         if(!sub.equals(post.getOwnerSub())){
             throw new ForbiddenOperationException(sub, "BloggPost", post.getId());

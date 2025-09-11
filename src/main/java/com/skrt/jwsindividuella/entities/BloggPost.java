@@ -63,8 +63,8 @@ public class BloggPost {
     public String getOwnerIdentifier() {
         return ownerIdentifier;
     }
-    public void setOwnerIdentifier(String ownerEmail) {
-        this.ownerIdentifier = ownerEmail;
+    public void setOwnerIdentifier(String ownerIdentifier) {
+        this.ownerIdentifier = ownerIdentifier;
     }
     public LocalDateTime getCreatedDate() {
         return createdDate;
