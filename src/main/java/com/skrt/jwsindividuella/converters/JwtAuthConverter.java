@@ -1,4 +1,4 @@
-package com.skrt.jwsinvidiuella.converters;
+package com.skrt.jwsindividuella.converters;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.skrt.jwsinvidiuella;
+package com.skrt.jwsindividuella;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

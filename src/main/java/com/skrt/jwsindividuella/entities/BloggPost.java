@@ -1,4 +1,4 @@
-package com.skrt.jwsinvidiuella.entities;
+package com.skrt.jwsindividuella.entities;
 
 import jakarta.persistence.*;
 
@@ -21,7 +21,7 @@ public class BloggPost {
     private String ownerSub;
 
     @Column(nullable = false,updatable = false)
-    private String ownerEmail;
+    private String ownerIdentifier;
 
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
@@ -60,11 +60,11 @@ public class BloggPost {
     public void setOwnerSub(String ownerSub) {
         this.ownerSub = ownerSub;
     }
-    public String getOwnerEmail() {
-        return ownerEmail;
+    public String getOwnerIdentifier() {
+        return ownerIdentifier;
     }
-    public void setOwnerEmail(String ownerEmail) {
-        this.ownerEmail = ownerEmail;
+    public void setOwnerIdentifier(String ownerEmail) {
+        this.ownerIdentifier = ownerEmail;
     }
     public LocalDateTime getCreatedDate() {
         return createdDate;
