@@ -1,6 +1,6 @@
-package com.skrt.jwsinvidiuella.configs;
+package com.skrt.jwsindividuella.configs;
 
-import com.skrt.jwsinvidiuella.converters.JwtAuthConverter;
+import com.skrt.jwsindividuella.converters.JwtAuthConverter;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
