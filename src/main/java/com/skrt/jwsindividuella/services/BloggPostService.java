@@ -46,8 +46,7 @@ public class BloggPostService {
         String preferredUsername = jwt.getClaimAsString("preferred_username");
         String ownerIdentifier = (email != null && !email.isBlank()) ? email : preferredUsername;
 
-        logger.debug("Creating bloggpost by sub={}, email/preferredUsername={}", sub, ownerIdentifier);
-        System.out.println("Creating bloggpost by sub={" + sub + "}");
+        logger.info("New bloggpost created by:\nsub={{}}", sub);
 
         BloggPost post = new BloggPost();
         post.setTitle(dto.title());
