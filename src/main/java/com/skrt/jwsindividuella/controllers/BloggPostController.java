@@ -6,7 +6,6 @@ import com.skrt.jwsindividuella.services.BloggPostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,19 +24,16 @@ public class BloggPostController {
     }
 
     @GetMapping("/posts")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<BloggPost>> getAllPosts() {
         return ResponseEntity.ok(service.allPosts());
     }
 
     @GetMapping("/post/{id}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BloggPost> getPostById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping("/newpost")
-    @PreAuthorize("hasRole('user')")
     public ResponseEntity<BloggPost> createPost(@Valid @RequestBody BloggPostDTO.CreateRequest dto, Authentication auth) {
         BloggPost created = service.create(dto, auth);
 
@@ -47,14 +43,12 @@ public class BloggPostController {
     }
 
     @PutMapping("/updatepost")
-    @PreAuthorize("hasRole('user')")
     public ResponseEntity<BloggPost> updatePost(@Valid @RequestBody BloggPostDTO.UpdateRequest dto, Authentication auth) {
         BloggPost updated = service.update(dto, auth);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/deletepost/{id}")
-    @PreAuthorize("hasAnyRole('user','admin')")
     public ResponseEntity<Void> deletePost(@PathVariable Long id, Authentication auth) {
         boolean isAdmin = auth.getAuthorities()
                 .stream()
@@ -65,7 +59,6 @@ public class BloggPostController {
     }
 
     @GetMapping("/count")
-    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<Long> count() {
         return ResponseEntity.ok(service.count());
     }
