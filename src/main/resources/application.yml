@@ -1,16 +1,19 @@
 server:
   port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
 
 spring:
   datasource:
-    url: jdbc:h2:mem:wigellbloggdb;
+    url: jdbc:h2:mem:wigellbloggdb;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
     username: sa
     password:
   jpa:
     hibernate:
       ddl-auto: update
-      show-sql: true
+    show-sql: true
   h2:
     console:
       enabled: true
@@ -19,7 +22,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: "http://localhost:8080/realms/wigellblogg"
+          issuer-uri: "http://localhost:8080/realms/WigellBlogg"
 
 app:
   security:

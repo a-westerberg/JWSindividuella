@@ -46,8 +46,7 @@ public class BloggPostService {
         String preferredUsername = jwt.getClaimAsString("preferred_username");
         String ownerIdentifier = (email != null && !email.isBlank()) ? email : preferredUsername;
 
-        logger.debug("Creating bloggpost by sub={}, email/preferredUsername={}", sub, ownerIdentifier);
-        System.out.println("Creating bloggpost by sub={" + sub + "}");
+        logger.info("New bloggpost created by:\nsub = {}", sub);
 
         BloggPost post = new BloggPost();
         post.setTitle(dto.title());
@@ -61,7 +60,7 @@ public class BloggPostService {
     @Transactional
     public BloggPost update(BloggPostDTO.UpdateRequest dto, Authentication auth){
         BloggPost existing = findById(dto.id());
-        ensureOwner(existing, auth);
+        validateOwner(existing, auth);
         existing.setTitle(dto.title());
         existing.setContent(dto.content());
         return bloggPostRepository.save(existing);
@@ -71,7 +70,7 @@ public class BloggPostService {
     public void delete(Long id, Authentication auth, boolean isAdmin){
         BloggPost existing = findById(id);
         if(!isAdmin){
-            ensureOwner(existing, auth);
+            validateOwner(existing, auth);
         }
         bloggPostRepository.delete(existing);
     }
@@ -81,7 +80,7 @@ public class BloggPostService {
         return bloggPostRepository.count();
     }
 
-    private void ensureOwner(BloggPost post, Authentication auth) {
+    private void validateOwner(BloggPost post, Authentication auth) {
         String sub = ((Jwt) auth.getPrincipal()).getClaimAsString("sub");
         if(!sub.equals(post.getOwnerSub())){
             throw new ForbiddenOperationException(sub, "BloggPost", post.getId());
