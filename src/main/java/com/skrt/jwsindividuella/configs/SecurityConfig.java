@@ -39,7 +39,23 @@ public class SecurityConfig {
                 )
                 .headers(h -> h.frameOptions(f -> f.disable()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(oauth->oauth.jwt(j -> j.jwtAuthenticationConverter(jwtAuthConverter))
+                .oauth2ResourceServer(oauth->oauth
+                        .authenticationEntryPoint((request, response, e) -> {
+                            response.setStatus(401);
+                            response.setContentType("application/json");
+                            String auth = request.getHeader("Authorization");
+                            String message = (auth == null || auth.isBlank() || !auth.startsWith("Bearer "))
+                                    ? "Missing Bearer Token" : "Invalid or malformed token";
+
+                            response.getWriter().write("""
+                                    {"status": 401,
+                                    "error": "Unauthorized",
+                                    "message": "%s",
+                                    "path": "%s"
+                                    }
+                                    """.formatted(message, request.getRequestURI()));
+                        })
+                        .jwt(j -> j.jwtAuthenticationConverter(jwtAuthConverter))
                 )
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler((request, response, e) -> {
@@ -49,22 +65,12 @@ public class SecurityConfig {
                                     {
                                     "status": 403,
                                     "error": "Forbidden",
-                                    "message": "You need role 'admin' to access this endpoint",
+                                    "message": "Missing permission to access this endpoint",
                                     "path": "%s"
                                     }
                                     """.formatted(request.getRequestURI()));
                         })
-                        .authenticationEntryPoint((request, response, e) -> {
-                            response.setStatus(401);
-                            response.setContentType("application/json");
-                            response.getWriter().write("""
-                                    {"status": 401,
-                                    "error": "Unauthorized",
-                                    "message": "Missing Bearer Token",
-                                    "path": "%s"
-                                    }
-                                    """.formatted(request.getRequestURI()));
-                        })
+
                 );
         return http.build();
     }
